@@ -72,7 +72,7 @@ export function AdminTable({ users, setUsers, fetchUsers, API }) {
 
   return (
     <div className="flex flex-col items-center">
-      <form onSubmit={handleSubmit} className="pb-3">
+      <form onSubmit={handleSubmit} className="pb-3" autoComplete="off">
         <input
           onChange={handleChange}
           value={form.username}
