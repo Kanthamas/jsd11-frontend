@@ -49,6 +49,7 @@ export default function Home() {
         },
         { withCredentials: true }
       );
+      // console.log(response.data.data);
       setAskResult(response.data?.data || null);
     } catch (error) {
       const message =
@@ -81,43 +82,61 @@ export default function Home() {
         </button>
       </section>
 
-      <section>
-        <div>Ask AI about users</div>
-        {authLoading ? (
-          <div>Checking login...</div>
-        ) : user ? (
-          <form onSubmit={askAI}>
-            <input
-              value={question}
-              onChange={(e) => setQuestion(e.target.value)}
-              placeholder="e.g. Who are admins?"
-            />
-            <button type="submit" disabled={askLoading}>
-              {askLoading ? "Asking..." : "Ask AI 🚀"}
-            </button>
-          </form>
-        ) : (
-          <div>Please login to use the AI feature</div>
-        )}
-        {askError ? <div>{askError}</div> : null}
-        {askResult ? (
-          <div>
-            <div>Answer</div>
-            <div>{askResult.answer || "(no answer)"}</div>
-            <div>Sources</div>
-            {Array.isArray(askResult.sources) && askResult.sources.length ? (
-              <ul>
-                {askResult.sources.map((s) => {
-                  <li key={s._id}>
-                    {s.username} ({s.role}) - {s.email}
-                  </li>;
-                })}
-              </ul>
-            ) : (
-              <div>No sources found.</div>
-            )}
-          </div>
-        ) : null}
+      <section className="w-full flex justify-center">
+        <div className="w-full max-w-3xl bg-white border rounded-2xl p-5">
+          <div className="font-bold text-lg">Ask AI about users</div>
+          {authLoading ? (
+            <div className="text-sm mt-2">Checking login…</div>
+          ) : user ? (
+            <form onSubmit={askAI} className="mt-3 flex gap-x-2">
+              <input
+                value={question}
+                onChange={(e) => setQuestion(e.target.value)}
+                placeholder='e.g. "Who are the admins?"'
+                className="flex-1 border rounded px-3 py-2"
+              />
+              <button
+                type="submit"
+                disabled={askLoading}
+                className="bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 text-white px-4 py-2 rounded"
+              >
+                {askLoading ? "Asking…" : "Ask AI"}
+              </button>
+            </form>
+          ) : (
+            <div className="text-sm mt-2 font-bold">
+              Please log in to use the AI feature
+            </div>
+          )}
+
+          {askError ? (
+            <div className="mt-3 text-sm bg-rose-100 border border-rose-200 text-rose-900 p-3 rounded">
+              {askError}
+            </div>
+          ) : null}
+
+          {askResult ? (
+            <div className="mt-3 text-sm">
+              <div className="font-bold">Answer</div>
+              <div className="mt-1 whitespace-pre-wrap">
+                {askResult.answer || "(no answer)"}
+              </div>
+
+              <div className="font-bold mt-3">Sources</div>
+              {Array.isArray(askResult.sources) && askResult.sources.length ? (
+                <ul className="list-disc pl-6 mt-1">
+                  {askResult.sources.map((s) => (
+                    <li key={s._id}>
+                      {s.username} ({s.role}) — {s.email}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="mt-1">No sources found.</div>
+              )}
+            </div>
+          ) : null}
+        </div>
       </section>
 
       <section className="w-full flex justify-center gap-x-3">
